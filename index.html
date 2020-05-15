@@ -42,9 +42,13 @@
 				createTile: function (coords) {
 							const tile = document.createElement('div');
 							tile.style.outline = '1px solid green';
-							tile.style.fontWeight = 'bold';
-							tile.style.fontSize = '14pt';
-							tile.innerHTML = [coords.z, coords.x, (2 ** coords.z - coords.y)-1].join('/');
+							//tile.style.fontWeight = 'bold';
+							tile.style.fontSize = '10pt';
+							tile.innerHTML = [
+                            (coords.x/Math.pow(2,coords.z)*360-180).toFixed(6) + ' ' +
+                            (180/Math.PI*Math.atan(0.5*(Math.exp(Math.PI-2*Math.PI*coords.y/Math.pow(2,coords.z))-Math.exp(-(Math.PI-2*Math.PI*coords.y/Math.pow(2,coords.z)))))).toFixed(6),
+							coords.z + '/'+ coords.x + '/' + ((2 ** coords.z - coords.y)-1),
+							].join('<br /><br />');
 								return tile;
 				},
 		});
@@ -54,8 +58,6 @@
 		};
 
         var grid = L.gridLayer.gridDebug();
-
-        //map.addLayer(L.gridLayer.gridDebug());
 
         // Base layers
         //  .. OpenStreetMap
@@ -76,21 +78,23 @@
 			opacity: 1.0, 
 			attribution: "",
 			minZoom: 10,
-			maxNativeZoom: 16
+			maxNativeZoom: 16,
+			bounds: L.latLngBounds([[50.345460, -3.515625],[51.944265, -2.812500]])
 		});
         var lyr2 = L.tileLayer('https://geoffrowland.github.io/Hillshade-1m-Devon/{z}/{x}/{y}.png', {
 			tms: true, 
 			opacity: 1.0, 
 			attribution: "",
 			minZoom: 10,
-			maxNativeZoom: 16
+			maxNativeZoom: 16,
+			bounds: L.latLngBounds([[50.176898, -4.702148],[51.261915, -3.515625]])
 		});
 
          // Map
         var map = L.map('map', {
 	    fullscreenControl: true,
-            center: [50.90843169904947, -2.8907366853532435],
-            zoom: 16,
+            center: [50.90843169904947, -3.16],
+            zoom: 10,
             minZoom: 4,
             maxZoom: 18,
             layers: [osm, lyr]
